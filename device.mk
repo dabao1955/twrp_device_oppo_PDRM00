@@ -5,7 +5,7 @@ PRODUCT_PACKAGES += \
     qcom_decrypt \
     qcom_decrypt_fbe
 
-#PRODUCT_USE_DYNAMIC_PARTITIONS := true
+PRODUCT_USE_DYNAMIC_PARTITIONS := true
 
 # Soong namespaces
 PRODUCT_SOONG_NAMESPACES += \
