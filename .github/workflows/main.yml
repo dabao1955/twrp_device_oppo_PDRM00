@@ -1,5 +1,6 @@
 name: build recovery
 on:
+  push:
   pull_request:
   workflow_dispatch:
   workflow_call:
@@ -63,6 +64,12 @@ jobs:
         python3 ~/bin/repo sync -j$(nproc --all) --force-sync
       working-directory: workspace
 
+    - run: sudo du -h workspace
+      continue-on-error: true
+
+    - run: sudo df -h
+      continue-on-error: true
+
     - name: Clone device tree
       run: |
         git clone https://github.com/dabao1955/twrp_device_oppo_PDRM00 -b oss-S ./device/oppo/PDRM00
@@ -87,8 +94,17 @@ jobs:
         lunch twrp_PDRM00-eng && make clean && make recoveryimage -j$(nproc --all)
       working-directory: workspace
 
+    - run: sudo du -h workspace
+      continue-on-error: true
+
+    - run: sudo df -h
+      continue-on-error: true
+
+    - run: sudo du -h workspace/out
+      continue-on-error: true
+
     - name: Upload recovery.img to Artifact
-      if: github.event_name == 'push'
+      if: github.event_name == 'workflow_dispatch'
       uses: actions/upload-artifact@v3
       with:
        name: "recovery.zip"
